@@ -1,0 +1,59 @@
+@import "../../../styles/mixins";
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .task-item {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        cursor: pointer;
+        padding: 20px;
+        border: 1px solid black;
+        transition: 0.3s ease-in-out;
+
+        .item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .item-stats {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+
+                .item-label {
+                    padding: 5px 20px;
+                    background-color: #717171;
+                    color: #FFFFFF;
+                }
+            }
+
+            .remove-task-icon {
+                @include cross-icon-style (18px);
+            }
+        }
+
+        .item-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .item-name {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                h1 {
+                    display: inline;
+                }
+            }
+        }
+
+        &:hover {
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+        }
+    }
+}

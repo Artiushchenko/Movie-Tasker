@@ -1,5 +1,16 @@
-<script setup></script>
+<template>
+    <Header />
+    <Main />
+</template>
 
-<template></template>
+<script>
+    import Header from "./components/Layout/Header/Header.vue";
+    import Main from "./components/Layout/Main/Main.vue";
 
-<style scoped></style>
+    export default {
+        components: {
+            Header,
+            Main
+        }
+    }
+</script>
