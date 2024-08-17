@@ -63,8 +63,21 @@ section {
                 border-radius: 20px;
                 width: max-content;
 
+                .add-new-tag-icon {
+                    transition: transform 0.3s ease-in-out;
+
+                    &.rotated {
+                        transform: rotate(45deg);
+                    }
+                }
+
                 .remove-tag-icon {
                     @include cross-icon-style (12px);
+                }
+
+                &.used {
+                    background-color: #0000ff;
+                    color: #FFFFFF;
                 }
             }
         }

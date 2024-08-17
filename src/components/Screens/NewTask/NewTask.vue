@@ -87,10 +87,13 @@
         </div>
 
         <div class="tag-list">
-            <div class="tag-wrapper" @click="tagMenuShow = !tagMenuShow">
+            <div
+                class="tag-wrapper"
+                @click="tagMenuShow = !tagMenuShow"
+            >
                 <div class="tag">
                     <span>Add New</span>
-                    <span class="add-new-tag-icon">
+                    <span class="add-new-tag-icon" :class="{ rotated: tagMenuShow }">
                         <i class="fa-solid fa-plus"></i>
                     </span>
                 </div>
@@ -107,8 +110,16 @@
         </div>
 
         <div class="tag-list">
-            <div class="tag-wrapper" v-for="tag in tags" :key="tag.title">
-                <div class="tag" @click="addTagUsed(tag)" :class="{ used: tag.use }">
+            <div
+                class="tag-wrapper"
+                v-for="tag in tags"
+                :key="tag.title"
+            >
+                <div
+                    class="tag"
+                    @click="addTagUsed(tag)"
+                    :class="{ used: tag.use }"
+                >
                     <span>{{ tag.title }}</span>
                     <span class="remove-tag-icon">
                         <i class="fa-solid fa-xmark"></i>
@@ -125,7 +136,6 @@
 export default {
     data() {
         return {
-            taskId: 3,
             taskTitle: '',
             taskDescription: '',
             taskCategory: 'Film',
@@ -134,20 +144,6 @@ export default {
             serialSeasons: 0,
             serialSeries: 0,
             serialSeriesMinutes: 0,
-            tags: [
-                {
-                    title: 'Comedy',
-                    use: false
-                },
-                {
-                    title: 'Westerns',
-                    use: false
-                },
-                {
-                    title: 'Adventure',
-                    use: false
-                },
-            ],
             tagsUsed: [],
             tagMenuShow: false,
             tagTitle: ''
@@ -156,10 +152,12 @@ export default {
     methods: {
         newTag() {
             if (this.tagTitle.trim() !== '') {
-                this.tags.push({
+                const tag = {
                     title: this.tagTitle,
-                    use: false
-                });
+                    use: false,
+                }
+
+                this.$store.dispatch('newTag', tag);
             }
         },
 
@@ -174,28 +172,32 @@ export default {
                 }
 
                 const task = {
-                    id: this.taskId,
                     title: this.taskTitle,
                     description: this.taskDescription,
                     category: this.taskCategory,
                     time,
-                    tagsUsed: this.tagsUsed,
+                    tags: this.tagsUsed,
                     completed: false,
                     editing: false
                 }
-            }
 
-            this.taskId++;
-            this.taskTitle = '';
-            this.taskDescription = '';
-            this.tagsUsed = [];
+                this.$store.dispatch('newTask', task);
+
+                this.tags.forEach(tag => {
+                    tag.use = false;
+                });
+
+                this.resetParams();
+            }
         },
 
         addTagUsed(tag) {
             tag.use = !tag.use;
 
             if (tag.use) {
-                this.tagsUsed.push(tag.title);
+                this.tagsUsed.push({
+                    title: tag.title
+                });
             } else {
                 this.tagsUsed.splice(tag.title, 1);
             }
@@ -206,9 +208,22 @@ export default {
             const min = minutes % 60;
 
             return hours + ' Hours ' + min + ' Minutes'
+        },
+
+        resetParams () {
+            this.taskTitle = '';
+            this.taskDescription = '';
+            this.tagsUsed = [];
+            this.filmHours = 0;
+            this.filmMinutes = 0;
+            this.tagTitle = '';
         }
     },
     computed: {
+        tags () {
+            return this.$store.getters.tags;
+        },
+
         filmTime() {
             const minutes = this.filmHours * 60 + this.filmMinutes;
             return this.getHoursAndMinutes(minutes)

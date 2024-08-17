@@ -1,18 +1,28 @@
 <template>
     <section>
-        <h1>Tasks</h1>
+        <div class="tasks-header">
+            <h1>Tasks</h1>
+
+            <div class="filter-list">
+                <button @click="filter = 'active'">Active</button>
+                <button @click="filter = 'completed'">Completed</button>
+                <button @click="filter = 'all'">All</button>
+            </div>
+        </div>
 
         <div class="task-list">
             <div
                 class="task-item"
-                v-for="task in tasks"
+                v-for="task in tasksFilter"
                 :key="task.id"
                 :class="{ completed: task.completed }"
             >
                 <div class="item-header">
                     <div class="item-stats">
                         <span class="item-label">{{ task.category }}</span>
-                        <span>Total Time: </span>
+                        <span>
+                            <strong>Total Time</strong>: {{ task.time }}
+                        </span>
                     </div>
 
                     <span class="remove-task-icon">
@@ -27,6 +37,18 @@
                     </div>
 
                     <p>{{ task.description }}</p>
+
+                    <div class="tag-list">
+                        <div
+                            class="tag-wrapper"
+                            v-for="tag in task.tags"
+                            :key="tag.title"
+                        >
+                            <div class="tag">
+                                <span>{{ tag.title }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -37,27 +59,23 @@
 export default {
     data() {
         return {
-            tasks: [
-                {
-                    'id': 1,
-                    'title': 'GrowthBusters: Hooked on Growth',
-                    'description': 'GrowthBusters description',
-                    'category': 'Film',
-                    'completed': false,
-                    'editing': false
-                },
-                {
-                    'id': 2,
-                    'title': 'Game of Thrones',
-                    'description': 'Game of Thrones description',
-                    'category': 'Serial',
-                    'completed': false,
-                    'editing': false
-                }
-            ]
+            filter: 'active'
+        }
+    },
+    computed: {
+        tasksFilter () {
+            if(this.filter === 'active') {
+                return this.$store.getters.taskNotCompleted;
+            } else if (this.filter === 'completed') {
+                return this.$store.getters.taskCompleted;
+            } else if (this.filter === 'all') {
+                return this.$store.getters.tasks;
+            }
+
+            return this.filter === 'active';
         }
     }
 }
 </script>
 
-<style src="./Tasks.scss"></style>
+<style src="./Tasks.scss" scoped></style>
