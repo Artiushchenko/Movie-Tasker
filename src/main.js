@@ -1,9 +1,10 @@
-import { createApp } from 'vue'
+import { createApp } from "vue"
 
-import './styles/style.scss'
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import "./styles/style.scss"
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "animate.css";
 
-import App from './App.vue'
+import App from "./App.vue"
 import router from "./router/router.js";
 import mainStore from "./stores/mainStore.js";
 

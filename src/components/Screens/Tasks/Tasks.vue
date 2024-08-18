@@ -4,9 +4,9 @@
             <h1>Tasks</h1>
 
             <div class="filter-list">
-                <button @click="filter = 'active'">Active</button>
-                <button @click="filter = 'completed'">Completed</button>
-                <button @click="filter = 'all'">All</button>
+                <Button :on-click="() => filter = 'active'">Active</Button>
+                <Button :on-click="() => filter = 'completed'">Completed</Button>
+                <Button :on-click="() => filter = 'all'">All</Button>
             </div>
         </div>
 
@@ -56,7 +56,13 @@
 </template>
 
 <script>
+
+import Button from "../../UI/Button/Button.vue";
+
 export default {
+    components: {
+        Button
+    },
     data() {
         return {
             filter: 'active'
@@ -78,4 +84,4 @@ export default {
 }
 </script>
 
-<style src="./Tasks.scss" scoped></style>
+<style src="./Tasks.scss" scoped lang="scss"></style>

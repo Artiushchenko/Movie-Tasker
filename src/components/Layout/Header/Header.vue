@@ -27,4 +27,4 @@
     }
 </script>
 
-<style src="./Header.scss"></style>
+<style src="./Header.scss" scoped lang="scss"></style>
