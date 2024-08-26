@@ -2,246 +2,165 @@
     <section>
         <h1>Home Page</h1>
 
-        <div
-            :class="{ errorInput: v$.taskTitle.$error }"
-        >
-            <input
-                type="text"
-                placeholder="What we will watch?"
-                v-model="taskTitle"
-                :class="inputClass(v$.taskTitle.$error)"
-                @change="v$.taskTitle.$touch()"
-            />
-
+        <form @submit.prevent="onSubmit">
             <div
-                v-for="error of v$.taskTitle.$errors"
-                :key="error.$uid"
-            >
-                <p class="error-message">{{ error.$message }}</p>
-            </div>
-        </div>
-
-        <div
-            :class="{ errorInput: v$.taskDescription.$error }"
-        >
-            <textarea
-                placeholder="Enter description here"
-                v-model="taskDescription"
-                :class="inputClass(v$.taskDescription.$error)"
-                @change="v$.taskDescription.$touch()"
-            />
-
-            <div
-                v-for="error of v$.taskDescription.$errors"
-                :key="error.$uid"
-            >
-                <p class="error-message">{{ error.$message }}</p>
-            </div>
-        </div>
-
-        <div class="option-list">
-            <div class="option-group">
-                <input
-                    type="radio"
-                    id="radioFilm"
-                    value="Film"
-                    v-model="taskCategory"
-                />
-                <label for="radioFilm">Film</label>
-            </div>
-
-            <div class="option-group">
-                <input
-                    type="radio"
-                    id="radioSerial"
-                    value="Serial"
-                    v-model="taskCategory"
-                />
-                <label for="radioSerial">Serial</label>
-            </div>
-        </div>
-
-        <div class="total-time">
-            <div class="total-time-settings" v-if="taskCategory === 'Film'">
-                <div class="total-time-group">
-                    <span>Hours</span>
-                    <div
-                        :class="{ errorInput: v$.filmHours.$error }"
-                    >
-                        <input
-                            type="number"
-                            v-model="filmHours"
-                            :class="inputClass(v$.filmHours.$error)"
-                            @change="v$.filmHours.$touch()"
-                        />
-
-                        <div
-                            v-for="error of v$.filmHours.$errors"
-                            :key="error.$uid"
-                        >
-                            <p class="error-message">{{ error.$message }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="total-time-group">
-                    <span>Minutes</span>
-                    <div
-                        :class="{ errorInput: v$.filmMinutes.$error }"
-                    >
-                        <input
-                            type="number"
-                            v-model="filmMinutes"
-                            :class="inputClass(v$.filmMinutes.$error)"
-                            @change="v$.filmMinutes.$touch()"
-                        />
-
-                        <div
-                            v-for="error of v$.filmMinutes.$errors"
-                            :key="error.$uid"
-                        >
-                            <p class="error-message">{{ error.$message }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <p>{{ filmTime }}</p>
-            </div>
-
-            <div class="total-time-settings" v-if="taskCategory === 'Serial'">
-                <div class="total-time-group">
-                    <span>How many seasons?</span>
-                    <div
-                        :class="{ errorInput: v$.serialSeasons.$error }"
-                    >
-                        <input
-                            type="number"
-                            v-model="serialSeasons"
-                            :class="inputClass(v$.serialSeasons.$error)"
-                            @change="v$.serialSeasons.$touch()"
-                        />
-
-                        <div
-                            v-for="error of v$.serialSeasons.$errors"
-                            :key="error.$uid"
-                        >
-                            <p class="error-message">{{ error.$message }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="total-time-group">
-                    <span>How many series?</span>
-                    <div
-                        :class="{ errorInput: v$.serialSeries.$error }"
-                    >
-                        <input
-                            type="number"
-                            v-model="serialSeries"
-                            :class="inputClass(v$.serialSeries.$error)"
-                            @change="v$.serialSeries.$touch()"
-                        />
-
-                        <div
-                            v-for="error of v$.serialSeries.$errors"
-                            :key="error.$uid"
-                        >
-                            <p class="error-message">{{ error.$message }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="total-time-group">
-                    <span>How long is one series?</span>
-                    <div
-                        :class="{ errorInput: v$.serialSeriesMinutes.$error }"
-                    >
-                        <input
-                            type="number"
-                            v-model="serialSeriesMinutes"
-                            :class="inputClass(v$.serialSeriesMinutes.$error)"
-                            @change="v$.serialSeriesMinutes.$touch()"
-                        />
-
-                        <div
-                            v-for="error of v$.serialSeriesMinutes.$errors"
-                            :key="error.$uid"
-                        >
-                            <p class="error-message">{{ error.$message }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <p>{{ serialTime }}</p>
-            </div>
-        </div>
-
-        <div class="tag-list">
-            <div
-                class="tag-wrapper"
-                @click="tagMenuShow = !tagMenuShow"
-            >
-                <div class="tag">
-                    <span>Add New</span>
-                    <span class="add-new-tag-icon" :class="{ rotated: tagMenuShow }">
-                        <i class="fa-solid fa-plus"></i>
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <div class="tag-list" v-if="tagMenuShow">
-            <div
-                :class="{ errorInput: v$.tagTitle.$error }"
+                :class="{ errorInput: v$.taskTitle.$error }"
             >
                 <input
                     type="text"
-                    placeholder="Name of the new tag"
-                    v-model="tagTitle"
-                    :class="inputClass(v$.tagTitle.$error)"
-                    @change="v$.tagTitle.$touch()"
+                    placeholder="What we will watch?"
+                    v-model="taskTitle"
+                    :class="inputClass(v$.taskTitle.$error)"
+                    @change="v$.taskTitle.$touch()"
                 />
 
                 <div
-                    v-for="error of v$.tagTitle.$errors"
+                    v-for="error of v$.taskTitle.$errors"
                     :key="error.$uid"
                 >
                     <p class="error-message">{{ error.$message }}</p>
                 </div>
             </div>
-            <Button :onClick="newTag">Add new tag</Button>
-        </div>
 
-        <div class="tag-list">
-            <transition-group
-                enter-active-class="animate__animated animate__fadeInRight"
-                leave-active-class="animate__animated animate__fadeOutDown"
-            >
+            <textarea
+                placeholder="Enter description here"
+                v-model="taskDescription"
+            />
+
+            <div class="option-list">
+                <div class="option-group">
+                    <input
+                        type="radio"
+                        id="radioFilm"
+                        value="Film"
+                        v-model="taskCategory"
+                    />
+                    <label for="radioFilm">Film</label>
+                </div>
+
+                <div class="option-group">
+                    <input
+                        type="radio"
+                        id="radioSerial"
+                        value="Serial"
+                        v-model="taskCategory"
+                    />
+                    <label for="radioSerial">Serial</label>
+                </div>
+            </div>
+
+            <div class="total-time">
+                <div class="total-time-settings" v-if="taskCategory === 'Film'">
+                    <div class="total-time-group">
+                        <span>Hours</span>
+                        <input
+                            type="number"
+                            v-model="filmHours"
+                        />
+                    </div>
+
+                    <div class="total-time-group">
+                        <span>Minutes</span>
+
+                        <input
+                            type="number"
+                            v-model="filmMinutes"
+                        />
+                    </div>
+
+                    <p>{{ filmTime }}</p>
+                </div>
+
+                <div class="total-time-settings" v-if="taskCategory === 'Serial'">
+                    <div class="total-time-group">
+                        <span>How many seasons?</span>
+
+                        <input
+                            type="number"
+                            v-model="serialSeasons"
+                        />
+                    </div>
+
+                    <div class="total-time-group">
+                        <span>How many series?</span>
+                        <input
+                            type="number"
+                            v-model="serialSeries"
+                        />
+                    </div>
+
+                    <div class="total-time-group">
+                        <span>How long is one series?</span>
+                        <input
+                            type="number"
+                            v-model="serialSeriesMinutes"
+                        />
+                    </div>
+
+                    <p>{{ serialTime }}</p>
+                </div>
+            </div>
+
+            <div class="tag-list">
                 <div
                     class="tag-wrapper"
-                    v-for="tag in tags"
-                    :key="tag.title"
+                    @click="tagMenuShow = !tagMenuShow"
                 >
-                    <div
-                        class="tag"
-                        @click="addTagUsed(tag)"
-                        :class="{ used: tag.use }"
-                    >
-                        <span>{{ tag.title }}</span>
-                        <span class="remove-tag-icon">
-                        <i class="fa-solid fa-xmark"></i>
+                    <div class="tag">
+                        <span>Add New</span>
+                        <span class="add-new-tag-icon" :class="{ rotated: tagMenuShow }">
+                        <i class="fa-solid fa-plus"></i>
                     </span>
                     </div>
                 </div>
-            </transition-group>
-        </div>
+            </div>
 
-        <Button class="sendTask" :onClick="newTask">Create</Button>
+            <div class="tag-list" v-if="tagMenuShow">
+                <input
+                    type="text"
+                    placeholder="Name of the new tag"
+                    v-model="tagTitle"
+                />
+                <Button :onClick="newTag">Add new tag</Button>
+            </div>
+
+            <div class="tag-list">
+                <transition-group
+                    enter-active-class="animate__animated animate__fadeInRight"
+                    leave-active-class="animate__animated animate__fadeOutDown"
+                >
+                    <div
+                        class="tag-wrapper"
+                        v-for="tag in tags"
+                        :key="tag.title"
+                    >
+                        <div
+                            class="tag"
+                            @click="addTagUsed(tag)"
+                            :class="{ used: tag.use }"
+                        >
+                            <span>{{ tag.title }}</span>
+                            <span class="remove-tag-icon" @click.stop="deleteTag(tag.title)">
+                                <i class="fa-solid fa-xmark"></i>
+                            </span>
+                        </div>
+                    </div>
+                </transition-group>
+            </div>
+
+            <Button
+                type="submit"
+                class="sendTask"
+                :disabled="v$.$invalid"
+            >
+                Create
+            </Button>
+        </form>
     </section>
 </template>
 
 <script>
-import {required, email, minLength, maxLength, helpers, minValue} from '@vuelidate/validators';
+import {required, helpers} from '@vuelidate/validators';
 import useVuelidate from "@vuelidate/core";
 
 import Button from "../../UI/Button/Button.vue";
@@ -271,39 +190,23 @@ export default {
         return {
             taskTitle: {
                 required: helpers.withMessage('Task title is required field!', required)
-            },
-            taskDescription: {
-                required: helpers.withMessage('Task description is required field!', required),
-                maxLengthDescription: helpers.withMessage('Description should not exceed 250 characters!', maxLength(250))
-            },
-            filmHours: {
-                required: helpers.withMessage('Film hours is required field!', required),
-                minValueHours: helpers.withMessage('Value must be at least 0!', minValue(0))
-            },
-            filmMinutes: {
-                required: helpers.withMessage('Film minutes is required field!', required),
-                minValueMinutes: helpers.withMessage('Value must be at least 1!', minValue(1))
-            },
-            serialSeasons: {
-                required: helpers.withMessage('Serial seasons is required field!', required),
-                minValueSerialSeasons: helpers.withMessage('Value must be at least 1!', minValue(1))
-            },
-            serialSeries: {
-                required: helpers.withMessage('Serial series is required field!', required),
-                minValueSerialSeries: helpers.withMessage('Value must be at least 1!', minValue(1))
-            },
-            serialSeriesMinutes: {
-                required: helpers.withMessage('Serial series minutes is required field!', required),
-                minValueSeriesMinutes: helpers.withMessage('Value must be at least 1!', minValue(1))
-            },
-            tagTitle: {
-                required: helpers.withMessage('Tag title is required field!', required),
-                minValueTagTitle: helpers.withMessage('Tag must be at least 1 character long!', minLength(1))
             }
         }
     },
 
     methods: {
+        onSubmit() {
+            this.v$.$touch();
+
+            if(!this.v$.$invalid) {
+                this.newTask();
+            }
+        },
+
+        loadTags() {
+            this.$store.dispatch('loadTags');
+        },
+
         newTag() {
             if (this.tagTitle.trim() !== '') {
                 const tag = {
@@ -311,12 +214,23 @@ export default {
                     use: false,
                 }
 
-                this.$store.dispatch('newTag', tag);
+                this.$store.dispatch('newTag', tag)
+                    .then(() => {
+                        this.loadTags();
+                    });
+
+                this.tagTitle = "";
             }
         },
 
+        deleteTag(tagTitle) {
+            this.$store.dispatch("deleteTag", tagTitle)
+                .then(() => {
+                    this.loadTags();
+                });
+        },
+
         newTask() {
-            if (this.taskTitle.trim() !== '') {
                 let time;
 
                 if (this.taskCategory === 'Film') {
@@ -342,7 +256,6 @@ export default {
                 });
 
                 this.resetParams();
-            }
         },
 
         addTagUsed(tag) {
@@ -371,6 +284,8 @@ export default {
             this.filmHours = 0;
             this.filmMinutes = 0;
             this.tagTitle = '';
+
+            this.v$.$reset();
         },
 
         inputClass(error) {
@@ -394,6 +309,9 @@ export default {
             const minutes = this.serialSeasons * this.serialSeries * this.serialSeriesMinutes;
             return this.getHoursAndMinutes(minutes)
         },
+    },
+    mounted() {
+        this.loadTags();
     }
 }
 </script>

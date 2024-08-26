@@ -66,12 +66,14 @@
                 </div>
 
                 <Button
-                    :type="submit"
+                    type="submit"
                     :disabled="v$.$invalid"
                 >
                     Register
                 </Button>
             </form>
+
+            <p v-if="submitStatus" class="submitStatus">{{ submitStatus }}</p>
 
             <div class="navigate">
                 <span>Do you have an account?</span>
@@ -85,60 +87,67 @@
 import {required, email, minLength, sameAs, helpers} from '@vuelidate/validators';
 import useVuelidate from "@vuelidate/core";
 import Button from "../../../UI/Button/Button.vue";
+import {getErrorMessage} from "../../../../services/getErrorMessage.js";
 
-    export default {
-        components: {
-            Button
-        },
-        data() {
-            return {
-                v$: useVuelidate(),
-                email: '',
-                password: '',
-                confirmPassword: ''
-            }
-        },
+export default {
+    components: {
+        Button
+    },
+    data() {
+        return {
+            v$: useVuelidate(),
+            email: '',
+            password: '',
+            confirmPassword: '',
+            submitStatus: null
+        }
+    },
 
-        validations () {
-            return {
-                email: {
-                    required: helpers.withMessage('E-mail field is required!', required),
-                    email: helpers.withMessage('The E-mail address is not valid!', email)
-                },
-                password: {
-                    required: helpers.withMessage('Password field is required!', required),
-                    minLength: helpers.withMessage('Password field should be at least 6 characters long', minLength(6))
-                },
-                confirmPassword: {
-                    sameAsPassword: helpers.withMessage('Passwords do not match!', sameAs(this.password))
-                }
-            }
-        },
-
-        methods: {
-            onSubmit () {
-                this.v$.$touch();
-
-                if (!this.v$.$invalid) {
-                    const user = {
-                        email: this.email,
-                        password: this.password
-                    }
-
-                    console.log(user);
-                } else {
-                    console.log('Form is invalid');
-                }
+    validations() {
+        return {
+            email: {
+                required: helpers.withMessage('E-mail field is required!', required),
+                email: helpers.withMessage('The E-mail address is not valid!', email)
             },
+            password: {
+                required: helpers.withMessage('Password field is required!', required),
+                minLength: helpers.withMessage('Password field should be at least 6 characters long', minLength(6))
+            },
+            confirmPassword: {
+                sameAsPassword: helpers.withMessage('Passwords do not match!', sameAs(this.password))
+            }
+        }
+    },
 
-            inputClass(error) {
-                return {
-                    'animate__animated animate__shakeX': error,
-                    errorMessage: error
+    methods: {
+        onSubmit() {
+            this.v$.$touch();
+
+            if (!this.v$.$invalid) {
+
+                const user = {
+                    email: this.email,
+                    password: this.password
                 }
+
+                this.$store.dispatch("registerUser", user)
+                    .then(() => {
+                        this.$router.push("/");
+                    })
+                    .catch(error => {
+                        this.submitStatus = getErrorMessage(error.code);
+                    })
+            }
+        },
+
+        inputClass(error) {
+            return {
+                'animate__animated animate__shakeX': error,
+                errorMessage: error
             }
         }
     }
+}
 </script>
 
 <style src="./Register.scss" scoped lang="scss"></style>

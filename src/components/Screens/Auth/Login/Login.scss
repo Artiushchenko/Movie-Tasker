@@ -54,6 +54,11 @@
             }
         }
 
+        .submitStatus {
+            font-weight: 700;
+            color: $red-color;
+        }
+
         .navigate {
             display: flex;
             gap: 5px;

@@ -46,8 +46,10 @@
                     </div>
                 </div>
 
-                <Button :type="submit" :disabled="v$.$invalid" >Log In</Button>
+                <Button type="submit" :disabled="v$.$invalid" >Log In</Button>
             </form>
+
+            <p v-if="submitStatus" class="submitStatus">{{ submitStatus }}</p>
 
             <div class="navigate">
                 <span>Don't have an account yet?</span>
@@ -63,6 +65,8 @@ import useVuelidate from "@vuelidate/core";
 
 import Button from "../../../UI/Button/Button.vue";
 
+import {getErrorMessage} from "../../../../services/getErrorMessage.js";
+
 export default {
     components: {
         Button
@@ -72,6 +76,7 @@ export default {
             v$: useVuelidate(),
             email: '',
             password: '',
+            submitStatus: null
         }
     },
 
@@ -97,9 +102,13 @@ export default {
                     password: this.password
                 }
 
-                console.log(user);
-            } else {
-                console.log('Form is invalid');
+                this.$store.dispatch("loginUser", user)
+                    .then(() => {
+                        this.$router.push("/");
+                    })
+                    .catch(error => {
+                        this.submitStatus = getErrorMessage(error.code);
+                    })
             }
         },
 

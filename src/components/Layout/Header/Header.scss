@@ -22,7 +22,7 @@ header {
             > li {
                 list-style-type: none;
 
-                > a {
+                > a, span {
                     @include reset-link-styles;
                     font-size: 18px;
                     position: relative;

@@ -6,14 +6,13 @@ section {
     flex-direction: column;
     gap: 20px;
 
-    input[type="text"] {
-        width: 100%;
-        padding: 10px;
-    }
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
 
-    > div {
-        > input,
-          textarea {
+        input,
+        textarea {
             padding: 10px;
             width: 100%;
             font-size: 14px;
@@ -31,122 +30,82 @@ section {
             color: $red-color;
             text-align: left;
         }
-    }
 
-    textarea {
-        height: 70px;
-        resize: none;
-    }
 
-    .option-list {
-        display: flex;
-        gap: 20px;
-
-        .option-group {
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        textarea {
+            height: 70px;
+            resize: none;
         }
-    }
 
-    .total-time {
-        .total-time-settings {
+        .option-list {
             display: flex;
-            flex-direction: column;
-            gap: 15px;
+            gap: 20px;
 
-            .total-time-group {
-                > div {
-                    > input,
-                    textarea {
+            .option-group {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+        }
+
+        .total-time {
+            .total-time-settings {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+
+                .total-time-group {
+                    input {
                         padding: 10px;
                         width: 20%;
                         font-size: 14px;
                         border: 2px solid $black-color;
+                    }
 
-                        &.errorMessage {
-                            border-color: $red-color;
+                    span {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        .tag-list {
+            display: flex;
+            gap: 15px;
+
+            .tag-wrapper {
+                .tag {
+                    cursor: pointer;
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                    padding: 5px 10px;
+                    border: 1px solid $black-color;
+                    border-radius: 20px;
+                    width: max-content;
+
+                    .add-new-tag-icon {
+                        transition: transform 0.3s ease-in-out;
+
+                        &.rotated {
+                            transform: rotate(45deg);
                         }
                     }
 
-                    .error-message {
-                        margin-top: 5px;
-                        font-size: 12px;
-                        font-weight: 600;
-                        color: $red-color;
-                        text-align: left;
+                    .remove-tag-icon {
+                        @include cross-icon-style(12px);
+                    }
+
+                    &.used {
+                        background-color: $blue-color;
+                        color: $white-color;
                     }
                 }
-
-                span {
-                    display: block;
-                }
-
-                input {
-                    width: 20%;
-                }
-            }
-        }
-    }
-
-    .tag-list {
-        display: flex;
-        gap: 15px;
-
-        > div {
-            > input,
-            textarea {
-                padding: 10px;
-                width: 100%;
-                font-size: 14px;
-                border: 2px solid $black-color;
-
-                &.errorMessage {
-                    border-color: $red-color;
-                }
-            }
-
-            .error-message {
-                margin-top: 5px;
-                font-size: 12px;
-                font-weight: 600;
-                color: $red-color;
-                text-align: left;
             }
         }
 
-        .tag-wrapper {
-            .tag {
-                cursor: pointer;
-                display: flex;
-                gap: 10px;
-                align-items: center;
-                padding: 5px 10px;
-                border: 1px solid $black-color;
-                border-radius: 20px;
-                width: max-content;
-
-                .add-new-tag-icon {
-                    transition: transform 0.3s ease-in-out;
-
-                    &.rotated {
-                        transform: rotate(45deg);
-                    }
-                }
-
-                .remove-tag-icon {
-                    @include cross-icon-style (12px);
-                }
-
-                &.used {
-                    background-color: $blue-color;
-                    color: $white-color;
-                }
-            }
+        .sendTask {
+            margin-left: auto;
         }
-    }
-
-    .sendTask {
-        margin-left: auto;
     }
 }

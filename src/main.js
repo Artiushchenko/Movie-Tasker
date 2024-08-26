@@ -1,6 +1,6 @@
-import { createApp } from "vue"
+import {createApp} from "vue";
 
-import "./styles/style.scss"
+import "./styles/main.scss"
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "animate.css";
 
