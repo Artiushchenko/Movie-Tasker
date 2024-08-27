@@ -24,6 +24,7 @@ export default {
                 dispatch("loadTags");
             } catch (error) {
                 commit("setError", error.message);
+                throw error;
             } finally {
                 commit("setLoading", false);
             }
@@ -40,6 +41,7 @@ export default {
                 dispatch("loadTags");
             } catch (error) {
                 commit("setError", error.message);
+                throw error;
             } finally {
                 commit("setLoading", false);
             }

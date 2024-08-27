@@ -1,6 +1,6 @@
 <template>
     <header>
-        <router-link class="logo" to="/">Movie Tasker</router-link>
+        <span class="logo">Movie Tasker</span>
 
         <nav>
             <ul>
@@ -17,10 +17,18 @@
 </template>
 
 <script>
+    import {useToast} from "vue-toastification";
+
     export default {
+        data() {
+            return {
+                toast: useToast()
+            }
+        },
         methods: {
             logout() {
                 this.$store.dispatch("logoutUser");
+                this.toast("You have been logged out successfully. See you next time!");
                 this.$router.push("/login");
             }
         },

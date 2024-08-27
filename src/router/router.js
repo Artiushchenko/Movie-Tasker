@@ -57,10 +57,14 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        return requireAuth(to, from, next);
+        if(!user.getters.checkUser) {
+            next("/login");
+        } else {
+            next();
+        }
+    } else {
+        next();
     }
-
-    next();
 });
 
 export default router;

@@ -53,6 +53,7 @@ export default {
                 commit("loadTasks", tasksArray);
             } catch (error) {
                 commit("setError", error.message);
+                throw error;
             } finally {
                 commit("setLoading", false);
             }
@@ -78,6 +79,7 @@ export default {
                 commit("newTask", {id, ...newTask});
             } catch (error) {
                 commit("setError", error.message);
+                throw error;
             } finally {
                 commit("setLoading", false);
             }
@@ -92,6 +94,7 @@ export default {
                 commit("editTask", {id, title, description});
             } catch (error) {
                 commit("setError", error.message);
+                throw error;
             } finally {
                 commit("setLoading", false);
             }
@@ -104,6 +107,7 @@ export default {
                 await deleteData(`tasks/${id}`);
             } catch (error) {
                 commit("setError", error.message);
+                throw error;
             } finally {
                 commit("setLoading", false);
             }
@@ -118,6 +122,7 @@ export default {
                 commit("completeTask", {id, completed});
             } catch (error) {
                 commit("setError", error.message);
+                throw error;
             } finally {
                 commit("setLoading", false);
             }

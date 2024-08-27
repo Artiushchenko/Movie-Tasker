@@ -121,6 +121,7 @@
 
 import Button from "../../UI/Button/Button.vue";
 import Pagination from "../../UI/Pagination/Pagination.vue";
+import {useToast} from "vue-toastification";
 
 export default {
     components: {
@@ -129,6 +130,7 @@ export default {
     },
     data() {
         return {
+            toast: useToast(),
             filter: 'active',
             searchQuery: '',
             editing: false,
@@ -179,6 +181,7 @@ export default {
         deleteTask(id) {
             this.$store.dispatch("deleteTask", id)
                 .then(() => {
+                    this.toast.success("Task has been deleted successfully.");
                     this.$store.dispatch("loadTasks");
                 });
         },
@@ -187,6 +190,8 @@ export default {
                 id,
                 completed: !completed
             });
+
+            this.toast.success("Great job! Task has been completed!");
         }
     },
     created() {

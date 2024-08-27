@@ -68,6 +68,8 @@ import Button from "../../../UI/Button/Button.vue";
 
 import {getErrorMessage} from "../../../../services/getErrorMessage.js";
 
+import {useToast} from "vue-toastification";
+
 export default {
     components: {
         Button
@@ -77,7 +79,8 @@ export default {
             v$: useVuelidate(),
             email: '',
             password: '',
-            submitStatus: null
+            submitStatus: null,
+            toast: useToast()
         }
     },
 
@@ -106,9 +109,11 @@ export default {
                 this.$store.dispatch("loginUser", user)
                     .then(() => {
                         this.$router.push("/");
+                        this.toast.success("Successfully logged in! Welcome back.");
                     })
                     .catch(error => {
                         this.submitStatus = getErrorMessage(error.code);
+                        this.toast.error("Login failed. Please check your credentials.");
                     })
             }
         },

@@ -30,6 +30,7 @@ export default {
                 commit("loadTags", tagsArray);
             } catch (error) {
                 commit("setError", error.message);
+                throw error;
             } finally {
                 commit("setLoading", false);
             }
@@ -49,6 +50,7 @@ export default {
                 commit("newTag", {id, ...newTag});
             } catch (error) {
                 commit("setError", error.message);
+                throw error;
             } finally {
                 commit("setLoading", false);
             }
@@ -69,6 +71,7 @@ export default {
                 }
             } catch (error) {
                 commit("setError", error.message);
+                throw error;
             } finally {
                 commit("setLoading", false);
             }
