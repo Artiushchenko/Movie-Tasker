@@ -1,4 +1,5 @@
-import {database, ref, push, set, get, update, remove} from "../firebase/firebase.js";
+import {database} from "../firebase/firebaseSettings.js";
+import {ref, push, set, get, update, remove} from "firebase/database";
 
 export async function fetchData(path) {
     const dataRef = ref(database, path);

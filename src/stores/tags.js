@@ -10,16 +10,22 @@ export default {
         deleteTag: (state, title) => state.tags = state.tags.filter(tag => tag.title !== title)
     },
     actions: {
-        async loadTags({commit}) {
+        async loadTags({commit, getters}) {
             commit("clearError");
             commit("setLoading", true);
 
             try {
                 const tagsData = await fetchData("tags");
-                const tagsArray = tagsData ? Object.keys(tagsData).map(key => ({
-                    ...tagsData[key],
-                    id: key
-                })) : [];
+                const tagsArray = tagsData ? Object.keys(tagsData).map(key => {
+                    const tag = tagsData[key];
+
+                    if (tag.user === getters.user.id) {
+                        return {
+                            ...tag,
+                            id: key
+                        }
+                    }
+                }).filter(Boolean) : [];
 
                 commit("loadTags", tagsArray);
             } catch (error) {
@@ -28,14 +34,19 @@ export default {
                 commit("setLoading", false);
             }
         },
-        async newTag({commit}, payload) {
+        async newTag({commit, getters}, payload) {
             commit("clearError");
             commit("setLoading", true);
 
             try {
-                const id = await addData("tags", payload);
+                const newTag = {
+                    ...payload,
+                    user: getters.user.id
+                }
 
-                commit("newTag", {id, ...payload});
+                const id = await addData("tags", newTag);
+
+                commit("newTag", {id, ...newTag});
             } catch (error) {
                 commit("setError", error.message);
             } finally {

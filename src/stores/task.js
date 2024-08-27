@@ -26,7 +26,7 @@ export default {
         }
     },
     actions: {
-        async loadTasks({commit}) {
+        async loadTasks({commit, getters}) {
             commit("clearError");
             commit("setLoading", true);
 
@@ -35,18 +35,20 @@ export default {
                 const tasksArray = tasksData ? Object.keys(tasksData).map(key => {
                     const task = tasksData[key];
 
-                    return new Task(
-                        task.title,
-                        task.description,
-                        task.category,
-                        task.time,
-                        task.tags,
-                        task.completed,
-                        task.editing,
-                        task.user,
-                        key
-                    );
-                }) : [];
+                    if (task.user === getters.user.id) {
+                        return new Task(
+                            task.title,
+                            task.description,
+                            task.category,
+                            task.time,
+                            task.tags,
+                            task.completed,
+                            task.editing,
+                            task.user,
+                            key
+                        );
+                    }
+                }).filter(Boolean) : [];
 
                 commit("loadTasks", tasksArray);
             } catch (error) {
