@@ -1,19 +1,13 @@
-import {database, ref, push, set, get, remove} from "../firebase/firebase.js";
+import {fetchData, addData, deleteData} from "../utils/firebaseUtils.js";
 
 export default {
     state: {
         tags: []
     },
     mutations: {
-        newTag (state, payload) {
-            state.tags.push(payload);
-        },
-        loadTags (state, payload) {
-            state.tags = payload;
-        },
-        deleteTag (state, title) {
-            state.tags = state.tags.filter(tag => tag.title !== title);
-        }
+        newTag: (state, payload) => state.tags.push(payload),
+        loadTags: (state, payload) => state.tags = payload,
+        deleteTag: (state, title) => state.tags = state.tags.filter(tag => tag.title !== title)
     },
     actions: {
         async loadTags({commit}) {
@@ -21,44 +15,31 @@ export default {
             commit("setLoading", true);
 
             try {
-                const tagsRef = ref(database, "tags");
-                const snapshot = await get(tagsRef);
+                const tagsData = await fetchData("tags");
+                const tagsArray = tagsData ? Object.keys(tagsData).map(key => ({
+                    ...tagsData[key],
+                    id: key
+                })) : [];
 
-                if(snapshot.exists()) {
-                    const tagsData = snapshot.val();
-                    const tagsArray = Object.keys(tagsData).map(key => ({
-                        ...tagsData[key],
-                        id: key
-                    }));
-
-                    commit("loadTags", tagsArray);
-                } else {
-                    commit("loadTags", []);
-                }
-
-                commit("setLoading", false);
+                commit("loadTags", tagsArray);
             } catch (error) {
-                commit("setLoading", false);
                 commit("setError", error.message);
-                throw error;
+            } finally {
+                commit("setLoading", false);
             }
         },
-        async newTag ({ commit }, payload) {
+        async newTag({commit}, payload) {
             commit("clearError");
             commit("setLoading", true);
 
             try {
-                const tagsRef = ref(database, "tags");
-                const newTagRef = push(tagsRef);
+                const id = await addData("tags", payload);
 
-                await set(newTagRef, payload);
-
-                commit("newTag", { id: newTagRef.key, ...payload });
-                commit("setLoading", false);
+                commit("newTag", {id, ...payload});
             } catch (error) {
-                commit("setLoading", false);
                 commit("setError", error.message);
-                throw error;
+            } finally {
+                commit("setLoading", false);
             }
         },
         async deleteTag({commit}, title) {
@@ -66,31 +47,23 @@ export default {
             commit("setLoading", true);
 
             try {
-                const tagsRef = ref(database, "tags");
-                const snapshot = await get(tagsRef);
+                const tagsData = await fetchData("tags");
+                const tagKey = tagsData ? Object.keys(tagsData).find(
+                    key => tagsData[key].title === title
+                ) : null;
 
-                if (snapshot.exists()) {
-                    const tagsData = snapshot.val();
-                    const tagKey = Object.keys(tagsData).find(key => tagsData[key].title === title);
-
-                    if (tagKey) {
-                        const tagRef = ref(database, `tags/${tagKey}`);
-                        await remove(tagRef);
-                        commit("deleteTag", title);
-                    }
+                if (tagKey) {
+                    await deleteData(`tags/${tagKey}`);
+                    commit("deleteTag", title);
                 }
-
-                commit("setLoading", false);
             } catch (error) {
-                commit("setLoading", false);
                 commit("setError", error.message);
-                throw error;
+            } finally {
+                commit("setLoading", false);
             }
         }
     },
     getters: {
-        tags (state) {
-            return state.tags;
-        }
+        tags: state => state.tags
     }
 }

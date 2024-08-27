@@ -2,15 +2,22 @@
 @import "../../../styles/variables";
 
 section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
     .tasks-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 20px 0;
 
         .filter-list {
             display: flex;
             gap: 20px;
+
+            > input {
+                padding: 10px;
+            }
         }
     }
 

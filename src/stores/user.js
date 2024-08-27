@@ -7,9 +7,7 @@ export default {
         user: null
     },
     mutations: {
-        setUser(state, payload) {
-            state.user = payload;
-        }
+        setUser: (state, payload) => state.user = payload
     },
     actions: {
         async registerUser({commit}, {email, password}) {
@@ -19,11 +17,10 @@ export default {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 commit("setUser", new User(userCredential.user.uid));
-                commit("setLoading", false);
             } catch (error) {
-                commit("setLoading", false);
                 commit("setError", error.message);
-                throw error;
+            } finally {
+                commit("setLoading", false);
             }
         },
         async loginUser({commit}, {email, password}) {
@@ -33,27 +30,20 @@ export default {
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 commit("setUser", new User(userCredential.user.uid));
-                commit("setLoading", false);
             } catch (error) {
-                commit("setLoading", false);
                 commit("setError", error.message);
-                throw error;
+            } finally {
+                commit("setLoading", false);
             }
         },
-        loggedUser({commit}, payload) {
-            commit("setUser", new User(payload.uid));
-        },
+        loggedUser: ({commit}, payload) => commit("setUser", new User(payload.uid)),
         logoutUser({commit}) {
             auth.signOut();
             commit("setUser", null);
         }
     },
     getters: {
-        user(state) {
-            return state.user
-        },
-        checkUser(state) {
-            return state.user !== null
-        }
+        user: state => state.user,
+        checkUser: state => state.user !== null
     }
 }

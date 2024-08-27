@@ -11,16 +11,16 @@
                     @input="tasksFilter"
                 />
 
-                <Button :on-click="() => filter = 'active'">Active</Button>
-                <Button :on-click="() => filter = 'completed'">Completed</Button>
-                <Button :on-click="() => filter = 'all'">All</Button>
+                <Button @click="() => filter = 'active'">Active</Button>
+                <Button @click="() => filter = 'completed'">Completed</Button>
+                <Button @click="() => filter = 'all'">All</Button>
             </div>
         </div>
 
         <div class="task-list">
             <div
                 class="task-item"
-                v-for="task in tasksFilter"
+                v-for="task in paginatedTasks"
                 :key="task.id"
                 :class="{ completed: task.completed }"
             >
@@ -65,9 +65,15 @@
             </div>
         </div>
 
+        <Pagination
+            v-if="showPagination"
+            :total-items="tasksFilter.length"
+            :items-per-page="itemsPerPage"
+            v-model="currentPage"
+        />
+
         <div
             class="modal-overlay"
-            @click="cancelTaskEdit"
             v-if="editing"
         >
             <div
@@ -114,9 +120,11 @@
 <script>
 
 import Button from "../../UI/Button/Button.vue";
+import Pagination from "../../UI/Pagination/Pagination.vue";
 
 export default {
     components: {
+        Pagination,
         Button
     },
     data() {
@@ -126,7 +134,24 @@ export default {
             editing: false,
             titleEditing: '',
             descriptionEditing: '',
-            taskId: null
+            taskId: null,
+            currentPage: parseInt(this.$route.params.page) || 1,
+            itemsPerPage: 5
+        }
+    },
+    watch: {
+        "$route.params.page"(newPage) {
+            this.currentPage = parseInt(newPage) || 1;
+        },
+        currentPage(newPage) {
+            if(newPage !== parseInt(this.$route.params.page)) {
+                this.$router.push({path: `/tasks/${newPage}`});
+            }
+        },
+        tasksFilter(newTasksFilter) {
+            if (newTasksFilter.length <= this.itemsPerPage) {
+                this.$router.push({ path: '/tasks/1' });
+            }
         }
     },
     methods: {
@@ -164,6 +189,14 @@ export default {
             });
         }
     },
+    created() {
+        this.currentPage = parseInt(this.$route.params.page) || 1;
+    },
+    mounted() {
+        if (this.tasksFilter.length <= this.itemsPerPage) {
+            this.$router.push({ path: '/tasks/1' });
+        }
+    },
     computed: {
         tasksFilter () {
             let filteredTasks = [];
@@ -183,6 +216,15 @@ export default {
             }
 
             return filteredTasks;
+        },
+        paginatedTasks() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+
+            return this.tasksFilter.slice(start, end);
+        },
+        showPagination() {
+            return this.tasksFilter.length > this.itemsPerPage;
         }
     }
 }

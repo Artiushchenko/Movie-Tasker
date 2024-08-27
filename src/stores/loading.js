@@ -26,11 +26,7 @@ export default {
         }
     },
     getters: {
-        loading(state) {
-            return state.loading;
-        },
-        error(state) {
-            return state.error;
-        }
+        loading: state => state.loading,
+        error: state => state.error
     }
 }

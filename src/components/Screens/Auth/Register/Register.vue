@@ -1,5 +1,5 @@
 <template>
-    <div class="auth">
+    <section class="auth">
         <div class="auth-banner">
             <img src="../../../../assets/register_photo.png">
         </div>
@@ -14,6 +14,7 @@
                     <input
                         type="email"
                         placeholder="E-mail"
+                        v-focus
                         v-model="email"
                         :class="inputClass(v$.email.$error)"
                         @change="v$.email.$touch()"
@@ -80,7 +81,7 @@
                 <router-link to="/login">Log In</router-link>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>

@@ -1,40 +1,54 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 
-import mainStore from "../stores/mainStore.js";
+import user from "../stores/user.js";
 
-import NewTask from "../components/Screens/NewTask/NewTask.vue";
-import Tasks from "../components/Screens/Tasks/Tasks.vue";
-import Login from "../components/Screens/Auth/Login/Login.vue";
-import Register from "../components/Screens/Auth/Register/Register.vue";
+function requireAuth(to, from, next) {
+    const isAuthenticated = user.getters.checkUser;
 
-const routes = [
+    if (!isAuthenticated) {
+        next("/login");
+    } else {
+        next();
+    }
+}
+
+const authRoutes = [
     {
         path: '/',
         name: 'Create new task',
-        component: NewTask,
+        component: () => import("../components/Screens/NewTask/NewTask.vue"),
         meta: {
             requiresAuth: true
         }
     },
     {
-        path: '/tasks',
+        path: '/tasks/:page?',
         name: 'Tasks',
-        component: Tasks,
+        component: () => import("../components/Screens/Tasks/Tasks.vue"),
         meta: {
             requiresAuth: true
         }
-    },
+    }
+];
+
+const publicRoutes = [
     {
         path: '/login',
         name: 'Login',
-        component: Login
+        component: () => import("../components/Screens/Auth/Login/Login.vue")
     },
     {
         path: '/registration',
         name: 'Registration',
-        component: Register
+        component: () => import("../components/Screens/Auth/Register/Register.vue")
     },
+    {
+        path: '/:pathMatch(.*)*',
+        component: () => import("../components/Screens/NotFound/NotFound.vue")
+    }
 ];
+
+const routes = [...authRoutes, ...publicRoutes];
 
 const router = createRouter({
     history: createWebHistory(),
@@ -42,20 +56,11 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const isAuthenticated = mainStore.getters.checkUser;
-
-    if(to.matched.some(record => record.meta.requiresAuth)) {
-        if(!isAuthenticated) {
-            localStorage.setItem('redirectAfterLogin', to.fullPath);
-            next("/login");
-        } else {
-            next();
-        }
-    } else {
-        next();
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        return requireAuth(to, from, next);
     }
-});
 
-mainStore.dispatch("loadTasks");
+    next();
+});
 
 export default router;
