@@ -89,16 +89,16 @@ import {required, email, minLength, sameAs, helpers} from '@vuelidate/validators
 import useVuelidate from "@vuelidate/core";
 import Button from "../../../UI/Button/Button.vue";
 import {getErrorMessage} from "../../../../services/getErrorMessage.js";
-import {useToast} from "vue-toastification";
+import {toastMixin} from "../../../../mixins/toastsMixin.js";
 
 export default {
+    mixins: [toastMixin],
     components: {
         Button
     },
     data() {
         return {
             v$: useVuelidate(),
-            toast: useToast(),
             email: '',
             password: '',
             confirmPassword: '',
@@ -135,11 +135,11 @@ export default {
 
                 this.$store.dispatch("registerUser", user)
                     .then(() => {
-                        this.toast.success("Your account has been created successfully! Welcome aboard!");
+                        this.showSuccessToast("Your account has been created successfully! Welcome aboard!");
                         this.$router.push("/");
                     })
                     .catch(error => {
-                        this.toast.error("Registration failed. Please try again.");
+                        this.showErrorToast("Registration failed. Please try again.");
                         this.submitStatus = getErrorMessage(error.code);
                     })
             }

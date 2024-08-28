@@ -165,16 +165,16 @@ import useVuelidate from "@vuelidate/core";
 
 import Button from "../../UI/Button/Button.vue";
 
-import {useToast} from "vue-toastification";
+import {toastMixin} from "../../../mixins/toastsMixin.js";
 
 export default {
+    mixins: [toastMixin],
     components: {
         Button
     },
     data() {
         return {
             v$: useVuelidate(),
-            toast: useToast(),
             taskTitle: '',
             taskDescription: '',
             taskCategory: 'Film',
@@ -222,7 +222,7 @@ export default {
                         this.loadTags();
                     });
 
-                this.toast.success(`Tag "${this.tagTitle}" has been created successfully!`);
+                this.showSuccessToast(`Tag "${this.tagTitle}" has been created successfully!`);
                 this.tagTitle = "";
             }
         },
@@ -230,7 +230,7 @@ export default {
         deleteTag(tagTitle) {
             this.$store.dispatch("deleteTag", tagTitle)
                 .then(() => {
-                    this.toast.success(`Tag "${tagTitle}" has been deleted successfully!`);
+                    this.showSuccessToast(`Tag "${tagTitle}" has been deleted successfully!`);
                     this.loadTags();
                 });
         },
@@ -260,7 +260,7 @@ export default {
                     tag.use = false;
                 });
 
-                this.toast.success("New task has been created successfully!");
+                this.showSuccessToast("New task has been created successfully!");
                 this.resetParams();
         },
 

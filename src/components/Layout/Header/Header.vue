@@ -17,18 +17,14 @@
 </template>
 
 <script>
-    import {useToast} from "vue-toastification";
+    import {toastMixin} from "../../../mixins/toastsMixin.js";
 
     export default {
-        data() {
-            return {
-                toast: useToast()
-            }
-        },
+        mixins: [toastMixin],
         methods: {
             logout() {
                 this.$store.dispatch("logoutUser");
-                this.toast("You have been logged out successfully. See you next time!");
+                this.showInfoToast("You have been logged out successfully. See you next time!");
                 this.$router.push("/login");
             }
         },

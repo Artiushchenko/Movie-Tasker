@@ -67,10 +67,10 @@ import useVuelidate from "@vuelidate/core";
 import Button from "../../../UI/Button/Button.vue";
 
 import {getErrorMessage} from "../../../../services/getErrorMessage.js";
-
-import {useToast} from "vue-toastification";
+import {toastMixin} from "../../../../mixins/toastsMixin.js";
 
 export default {
+    mixins: [toastMixin],
     components: {
         Button
     },
@@ -79,8 +79,7 @@ export default {
             v$: useVuelidate(),
             email: '',
             password: '',
-            submitStatus: null,
-            toast: useToast()
+            submitStatus: null
         }
     },
 
@@ -109,11 +108,11 @@ export default {
                 this.$store.dispatch("loginUser", user)
                     .then(() => {
                         this.$router.push("/");
-                        this.toast.success("Successfully logged in! Welcome back.");
+                        this.showSuccessToast("Successfully logged in! Welcome back.");
                     })
                     .catch(error => {
                         this.submitStatus = getErrorMessage(error.code);
-                        this.toast.error("Login failed. Please check your credentials.");
+                        this.showErrorToast("Login failed. Please check your credentials.");
                     })
             }
         },
