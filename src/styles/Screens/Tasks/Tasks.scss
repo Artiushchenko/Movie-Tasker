@@ -1,0 +1,27 @@
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 75vh;
+
+    .tasks-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .no-tasks {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+}

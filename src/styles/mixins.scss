@@ -1,3 +1,5 @@
+@import "./variables";
+
 @mixin reset-link-styles {
     cursor: pointer;
     text-decoration: none;
@@ -10,5 +12,83 @@
 
     &:hover {
         color: #FF0000;
+    }
+}
+
+@mixin auth-form-styles {
+    .auth {
+        display: flex;
+
+        .auth-banner,
+        .auth-form {
+            width: 50%;
+            display: flex;
+        }
+
+        .auth-banner {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-form {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+
+            span {
+                font-size: 30px;
+                font-weight: 800;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                width: 60%;
+
+                > div {
+                    > input {
+                        padding: 10px;
+                        width: 100%;
+                        font-size: 14px;
+                        border: 2px solid $black-color;
+
+                        &.errorMessage {
+                            border-color: $red-color;
+                        }
+                    }
+
+                    .error-message {
+                        margin-top: 5px;
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: $red-color;
+                        text-align: center;
+                    }
+                }
+            }
+
+            .submitStatus {
+                font-weight: 700;
+                color: $red-color;
+            }
+
+            .navigate {
+                display: flex;
+                gap: 5px;
+
+                span {
+                    font-size: 14px;
+                    font-weight: normal;
+                }
+
+                a {
+                    @include reset-link-styles;
+                    color: $blue-color;
+                    font-size: 14px;
+                }
+            }
+        }
     }
 }

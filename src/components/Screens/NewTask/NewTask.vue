@@ -1,6 +1,6 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
     <section>
-        <h1>Home Page</h1>
+        <h1>Create new task</h1>
 
         <form @submit.prevent="onSubmit">
             <div
@@ -27,27 +27,7 @@
                 v-model="taskDescription"
             />
 
-            <div class="option-list">
-                <div class="option-group">
-                    <input
-                        type="radio"
-                        id="radioFilm"
-                        value="Film"
-                        v-model="taskCategory"
-                    />
-                    <label for="radioFilm">Film</label>
-                </div>
-
-                <div class="option-group">
-                    <input
-                        type="radio"
-                        id="radioSerial"
-                        value="Serial"
-                        v-model="taskCategory"
-                    />
-                    <label for="radioSerial">Serial</label>
-                </div>
-            </div>
+            <CategorySelector v-model="taskCategory" />
 
             <div class="total-time">
                 <div class="total-time-settings" v-if="taskCategory === 'Film'">
@@ -166,10 +146,12 @@ import useVuelidate from "@vuelidate/core";
 import Button from "../../UI/Button/Button.vue";
 
 import {toastMixin} from "../../../mixins/toastsMixin.js";
+import CategorySelector from "./base/CategorySelector/CategorySelector.vue";
 
 export default {
     mixins: [toastMixin],
     components: {
+        CategorySelector,
         Button
     },
     data() {
@@ -280,7 +262,7 @@ export default {
             const hours = Math.trunc(minutes / 60);
             const min = minutes % 60;
 
-            return hours + ' Hours ' + min + ' Minutes'
+            return `${hours} Hours ${min} Minutes`;
         },
 
         resetParams() {
@@ -322,4 +304,4 @@ export default {
 }
 </script>
 
-<style src="./NewTask.scss" scoped lang="scss"></style>
+<style src="../../../styles/Screens/NewTask/NewTask.scss" scoped lang="scss"></style>

@@ -155,4 +155,4 @@ export default {
 }
 </script>
 
-<style src="./Register.scss" scoped lang="scss"></style>
+<style src="../../../../styles/Screens/Auth/Register.scss" scoped lang="scss"></style>

@@ -1,5 +1,5 @@
-@import "../../../styles/mixins";
-@import "../../../styles/variables";
+@import "../../mixins";
+@import "../../variables";
 
 section {
     display: flex;
@@ -37,17 +37,6 @@ section {
             resize: none;
         }
 
-        .option-list {
-            display: flex;
-            gap: 20px;
-
-            .option-group {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-            }
-        }
-
         .total-time {
             .total-time-settings {
                 display: flex;
@@ -71,7 +60,12 @@ section {
 
         .tag-list {
             display: flex;
-            gap: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
+
+            > input {
+                width: 20%;
+            }
 
             .tag-wrapper {
                 .tag {

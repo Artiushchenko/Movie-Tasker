@@ -35,4 +35,4 @@
     }
 </script>
 
-<style src="./Button.scss" scoped lang="scss"></style>
+<style src="../../../styles/UI/Button.scss" scoped lang="scss"></style>

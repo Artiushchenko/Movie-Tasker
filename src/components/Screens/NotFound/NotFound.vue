@@ -29,4 +29,4 @@ export default defineComponent({
 })
 </script>
 
-<style src="./NotFound.scss" scoped lang="scss"></style>
+<style src="../../../styles/Screens/NotFound/NotFound.scss" scoped lang="scss"></style>

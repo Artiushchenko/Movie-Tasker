@@ -127,4 +127,4 @@ export default {
 }
 </script>
 
-<style src="./Login.scss" scoped lang="scss"></style>
+<style src="../../../../styles/Screens/Auth/Login.scss" scoped lang="scss"></style>

@@ -1,16 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 
-import user from "../stores/user.js";
-
-function requireAuth(to, from, next) {
-    const isAuthenticated = user.getters.checkUser;
-
-    if (!isAuthenticated) {
-        next("/login");
-    } else {
-        next();
-    }
-}
+import handleAuthStateChanged from "../firebase/authStateChanged.js";
+import mainStore from "../stores/mainStore.js";
 
 const authRoutes = [
     {
@@ -55,13 +46,13 @@ const router = createRouter({
     routes
 });
 
-router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if(!user.getters.checkUser) {
-            next("/login");
-        } else {
-            next();
-        }
+router.beforeEach(async (to, from, next) => {
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+
+    const user = await handleAuthStateChanged(mainStore);
+
+    if (requiresAuth && !user) {
+        next('/login');
     } else {
         next();
     }

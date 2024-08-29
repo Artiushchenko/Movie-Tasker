@@ -49,4 +49,4 @@
     }
 </script>
 
-<style src="./Header.scss" scoped lang="scss"></style>
+<style src="../../../styles/Layout/Header.scss" scoped lang="scss"></style>

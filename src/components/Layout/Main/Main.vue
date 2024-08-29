@@ -4,4 +4,4 @@
     </main>
 </template>
 
-<style src="./Main.scss" scoped lang="scss"></style>
+<style src="../../../styles/Layout/Main.scss" scoped lang="scss"></style>

@@ -2,13 +2,16 @@ import {onAuthStateChanged} from "firebase/auth";
 import {auth} from "./firebaseSettings.js";
 
 const handleAuthStateChanged = store => {
-    onAuthStateChanged(auth, user => {
-        if (user) {
-            store.dispatch("loggedUser", user);
-        }
+    return new Promise(resolve => {
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                store.dispatch("loggedUser", user);
+            }
 
-        store.dispatch("loadTasks");
-    });
+            store.dispatch("loadTasks");
+            resolve(user);
+        });
+    })
 }
 
 export default handleAuthStateChanged;

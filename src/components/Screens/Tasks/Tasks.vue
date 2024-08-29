@@ -3,66 +3,27 @@
         <div class="tasks-header">
             <h1>Tasks</h1>
 
-            <div class="filter-list">
-                <input
-                    type="text"
-                    v-model="searchQuery"
-                    placeholder="Search task by title..."
-                    @input="tasksFilter"
-                />
-
-                <Button @click="() => filter = 'active'">Active</Button>
-                <Button @click="() => filter = 'completed'">Completed</Button>
-                <Button @click="() => filter = 'all'">All</Button>
-            </div>
+            <FilterList
+                :filter="filter"
+                :searchQuery="searchQuery"
+                @update:filter="updateFilter"
+                @update:searchQuery="updateSearchQuery"
+            />
         </div>
 
-        <div class="task-list">
-            <div
-                class="task-item"
+        <div v-if="paginatedTasks.length === 0" class="no-tasks">
+            <h1>No tasks available yet</h1>
+        </div>
+
+        <div v-else class="task-list">
+            <TaskItem
                 v-for="task in paginatedTasks"
                 :key="task.id"
-                :class="{ completed: task.completed }"
-            >
-                <div class="item-header">
-                    <div class="item-stats">
-                        <span class="item-label">{{ task.category }}</span>
-                        <span>
-                            <strong>Total Time</strong>: {{ task.time }}
-                        </span>
-                    </div>
-
-                    <span
-                        class="remove-task-icon"
-                        @click="deleteTask(task.id)"
-                    >
-                        <i class="fa-solid fa-xmark"></i>
-                    </span>
-                </div>
-
-                <div class="item-content">
-                    <h1>{{ task.title }}</h1>
-
-                    <p>{{ task.description }}</p>
-
-                    <div class="tag-list">
-                        <div
-                            class="tag-wrapper"
-                            v-for="tag in task.tags"
-                            :key="tag.title"
-                        >
-                            <div class="tag">
-                                <span>{{ tag.title }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="task-buttons-container">
-                        <Button @click="taskEdit(task.id, task.title, task.description)">Edit</Button>
-                        <Button @click="toggleCompletion(task.id, task.completed)">Done</Button>
-                    </div>
-                </div>
-            </div>
+                :task="task"
+                @delete-task="deleteTask"
+                @edit-task="taskEdit"
+                @toggle-completion="toggleCompletion"
+            />
         </div>
 
         <Pagination
@@ -72,48 +33,13 @@
             v-model="currentPage"
         />
 
-        <div
-            class="modal-overlay"
-            v-if="editing"
-        >
-            <div
-                class="modal-content animate__animated animate__jackInTheBox"
-                @click.stop
-            >
-                <div class="modal-header">
-                    <h2>{{ titleEditing }}</h2>
-
-                    <button
-                        class="close-button"
-                        @click="cancelTaskEdit"
-                    >
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <div>
-                        <p>Title:</p>
-                        <input
-                            type="text"
-                            v-model="titleEditing"
-                        />
-                    </div>
-
-                    <div>
-                        <p>Description:</p>
-                        <textarea
-                            v-model="descriptionEditing"
-                        />
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <Button :on-click="cancelTaskEdit">Cancel</Button>
-                    <Button :on-click="finishTaskEdit">OK</Button>
-                </div>
-            </div>
-        </div>
+        <TaskEditModal
+            :visible="editing"
+            :title="titleEditing"
+            :description="descriptionEditing"
+            @close="cancelTaskEdit"
+            @save="finishTaskEdit"
+        />
     </section>
 </template>
 
@@ -121,11 +47,18 @@
 
 import Button from "../../UI/Button/Button.vue";
 import Pagination from "../../UI/Pagination/Pagination.vue";
+import TaskEditModal from "./base/TaskEditModal/TaskEditModal.vue";
+
 import {toastMixin} from "../../../mixins/toastsMixin.js";
+import FilterList from "./base/FilterList/FilterList.vue";
+import TaskItem from "./base/TaskItem/TaskItem.vue";
 
 export default {
     mixins: [toastMixin],
     components: {
+        TaskItem,
+        FilterList,
+        TaskEditModal,
         Pagination,
         Button
     },
@@ -157,6 +90,12 @@ export default {
         }
     },
     methods: {
+        updateFilter(newFilter) {
+            this.filter = newFilter;
+        },
+        updateSearchQuery(newQuery) {
+            this.searchQuery = newQuery;
+        },
         taskEdit (id, title, description) {
             this.editing = !this.editing;
             this.taskId = id;
@@ -169,11 +108,13 @@ export default {
             this.titleEditing = "";
             this.descriptionEditing = "";
         },
-        finishTaskEdit () {
+        finishTaskEdit (updatedData) {
+            const { title, description } = updatedData;
+
             this.$store.dispatch("editTask", {
                 id: this.taskId,
-                title: this.titleEditing,
-                description: this.descriptionEditing
+                title: title,
+                description: description
             });
 
             this.editing = !this.editing;
@@ -235,4 +176,4 @@ export default {
 }
 </script>
 
-<style src="./Tasks.scss" scoped lang="scss"></style>
+<style src="../../../styles/Screens/Tasks/Tasks.scss" scoped lang="scss"></style>

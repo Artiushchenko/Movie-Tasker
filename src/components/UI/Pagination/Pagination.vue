@@ -62,4 +62,4 @@ export default {
 }
 </script>
 
-<style src="./Pagination.scss" scoped lang="scss" />
+<style src="../../../styles/UI/Pagination.scss" scoped lang="scss" />
